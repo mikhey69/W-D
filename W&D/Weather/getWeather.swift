@@ -12,8 +12,8 @@ class GetWeather: NSObject {
     let openweatherMapBaseURL = "http:/api.openweathermap.org/data/2.5/forecast"
     let openweatherMaAPIKey = "02e192611291898113072edd948bbe34"
     
-    func getWeather(forCity: Int) {
-        let myUrl = "\(openweatherMapBaseURL)?&id=\(forCity)&APPID=\(openweatherMaAPIKey)"
+    func getWeather(forCity: String) {
+        let myUrl = "\(openweatherMapBaseURL)?&q=\(forCity)&APPID=\(openweatherMaAPIKey)"
         print("myUrl \(myUrl)")
         
         Alamofire.request(myUrl).responseJSON { (response) in
@@ -23,7 +23,7 @@ class GetWeather: NSObject {
             let json = JSON(response.result.value!)
             let weatherJson = json["list"].arrayValue
             var weather = [Weather]()
-            var id = json["city"]["id"].int64Value
+            let id = json["city"]["id"].int64Value
             for element in weatherJson {
                 let weatherPoint = Weather(weatherName: element["weather"].arrayValue.first?["main"].stringValue ?? "none",
                                          weatherDescrib: element["weather"].arrayValue.first?["description"].stringValue ?? "none",

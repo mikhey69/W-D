@@ -9,9 +9,10 @@ class Login: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-        
-        GetWeather.shared.getWeather(forCity: 703448)
-        GetWeather.shared.getWeather(forCity: 698740)
+        DispatchQueue.global(qos: .userInteractive).async {
+            GetWeather.shared.getWeather(forCity: "Kiev")
+            GetWeather.shared.getWeather(forCity: "Lviv")
+        }
     }
 }
 

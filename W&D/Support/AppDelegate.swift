@@ -12,7 +12,6 @@ import Firebase
 import GoogleMobileAds
 import Crashlytics
 import Fabric
-import SwiftyJSON
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,9 +23,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var currentWeather: Weather!
     var currentTime: String = ""
     var pageControlHight: CGRect!
+    var citiesJSON = [CityInfo]()
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        //cities list
+        if UserDefaults.standard.object(forKey: "citiesJSON") != nil {
+            let decoded  = UserDefaults.standard.object(forKey: "citiesJSON") as! Data
+            let decodedTeams = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [CityInfo]
+            self.citiesJSON = decodedTeams
+            print("done \(citiesJSON.count)")
+        } else {
+            print("troble")
+        }
+        
+//        Function.shared.searchInJson()
+        
         //Firebase
         FirebaseApp.configure()
         //adMob
@@ -36,9 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Fabric.sharedSDK().debug = true
         
-        DispatchQueue.global(qos: .userInteractive).async {
-            self.addCitiesList()
-        }
+    
         
         if !allCities.isEmpty {
             
@@ -54,36 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //need add city
         }
         
-//        allCities.removeAll()
-//        removeDataFrom(entity: "City")
-        
         return true
-    }
-    
-    func addCitiesList() {
-        if let path = Bundle.main.path(forResource: "city.list", ofType: "json") {
-            
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path))
-                let json = try JSON(data: data)
-                print("count \(json.arrayValue.count)")
-                var a = json.arrayValue.filter { (item) -> Bool in
-                    if item["name"].string == "Kiev" {
-                        print("done Kiev")
-                        return true
-                    }
-                    return false
-                }
-                print("ap \(a.first)")
-//                print("json \(json)")
-                for i in json.arrayValue {
-//                    let elemenet =
-                }
-                
-            } catch {
-                print("json error")
-            }
-        }
     }
 
     func removeDataFrom(entity: String) {

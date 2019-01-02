@@ -83,6 +83,7 @@ extension NowCity: UITableViewDelegate, UITableViewDataSource {
             let city = appDelegate.currentCity
             if city != nil {
                 print("current City \(city?.name)")
+                print("current Weather \(appDelegate.currentWeather)")
                 let weather = appDelegate.currentWeather
                 // one in 3 hour
                 cell1.time.text = weather?.date
