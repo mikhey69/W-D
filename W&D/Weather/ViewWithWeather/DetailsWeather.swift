@@ -28,6 +28,7 @@ class DetailsWeather: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     override func viewDidLoad() {
+        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 111/255, green: 113/255, blue: 121/255, alpha: 1.0)
         super.viewDidLoad()
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -56,13 +57,13 @@ extension DetailsWeather {
         if weather != nil {
             if indexPath.row == 0 {
                 cell.name.text = "humidity"
-                cell.valueLbl.text = String(Int(weather.humidity ?? 0)) + " hpa"
+                cell.valueLbl.text = String(Int(weather.humidity ?? 0)) + "%"
             } else if indexPath.row == 1 {
                 cell.name.text = "Wind Speed"
-                cell.valueLbl.text = String(Int(weather.windSpeed ?? 0)) + "%"
+                cell.valueLbl.text = String(Int(weather.windSpeed ?? 0)) + " m/s"
             } else if indexPath.row == 2 {
                 cell.name.text = "Pressure"
-                cell.valueLbl.text =  String(Int(weather.pressure ?? 0)) + " m/s"
+                cell.valueLbl.text =  String(Int(weather.pressure ?? 0)) + " hpa"
             }
         }
         
