@@ -29,8 +29,21 @@ class NowCity: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        //current City
+        //current City
+        //reloc
+        if !appDelegate.allCities.isEmpty {
+                if UserDefaults.standard.integer(forKey: "CurrentCityId") != 0 {
+                    appDelegate.currentCity = appDelegate.allCities.filter({$0.id == UserDefaults.standard.integer(forKey: "CurrentCityId")}).first
+                } else {
+                    appDelegate.currentCity = appDelegate.allCities[0]
+                    UserDefaults.standard.set(appDelegate.currentCity.id, forKey: "CurrentCityId")
+                }
+        } else {
+            //need add city
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeCity), name: NSNotification.Name("ChangeCity"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showSideMenu), name: NSNotification.Name("showSideMenu"), object: nil)
         
         appDelegate.pageControlHight = pageControl.frame
         pageControl.currentPageIndicatorTintColor = UIColor.black
@@ -61,11 +74,24 @@ class NowCity: UIViewController {
         NotificationCenter.default.post(name: NSNotification.Name("addPoints"), object: nil)
     }
     
+    
+    @objc func showSideMenu() {
+        performSegue(withIdentifier: "showSideMenu1", sender: nil)
+    }
+    
     @objc func changeCity() {
         print("done")
         Function.shared.timeUpdate()
         city.text = appDelegate.currentCity.name
         tableView.reloadData()
+        appDelegate.currentWeather = appDelegate.currentCity.weather?[0]
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDetailsCurrent" {
+            let vc = segue.destination as! DetailsWeather
+            vc.weather = appDelegate.currentWeather
+        }
     }
 }
 
@@ -82,8 +108,8 @@ extension NowCity: UITableViewDelegate, UITableViewDataSource {
             let cell1 = tableView.dequeueReusableCell(withIdentifier: "CurrentWeaher", for: indexPath) as! WeatherCell
             let city = appDelegate.currentCity
             if city != nil {
-                print("current City \(city?.name)")
-                print("current Weather \(appDelegate.currentWeather)")
+//                print("current City \(city?.name)")
+//                print("current Weather \(appDelegate.currentWeather)")
                 let weather = appDelegate.currentWeather
                 // one in 3 hour
                 cell1.time.text = weather?.date
@@ -100,7 +126,7 @@ extension NowCity: UITableViewDelegate, UITableViewDataSource {
         } else {
             let cell2 = tableView.dequeueReusableCell(withIdentifier: "CurrentWeaher2", for: indexPath)
             cell2.textLabel?.textColor = UIColor.white
-//            cell2.textLabel?.text = "test cell text"
+
             cell = cell2
         }
         

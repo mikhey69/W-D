@@ -17,6 +17,8 @@ class AddedCitiesListCell: UITableViewCell {
     @IBOutlet weak var temp: UILabel!
     @IBOutlet weak var SelectedCity: UIView!
     
+    var id: Int64 = 0
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }

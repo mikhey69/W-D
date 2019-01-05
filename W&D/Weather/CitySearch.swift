@@ -18,10 +18,32 @@ class CitySearch: UIViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.closeSearch), name: NSNotification.Name("CloseSearch"), object: nil)
     }
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    @objc func closeSearch() {
+        self.removeFromParent()
+        self.view.removeFromSuperview()
+        NotificationCenter.default.post(name: NSNotification.Name("ChangeCity"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name("showSideMenu"), object: nil)
+        
+    }
+    
+    
+    @IBAction func addSity(_ sender: Any) {
+        if searchBar.text != "" && searchBar.text != " " {
+            GetWeather.shared.getWeather(forCity: searchBar.text ?? " ", showAlert: true)
+        }
+    }
+    
+    
+    @IBAction func cancelView(_ sender: Any) {
+        self.removeFromParent()
+        self.view.removeFromSuperview()
     }
 }
 
@@ -40,7 +62,6 @@ extension CitySearch {
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         return true
-        
     }
     
     func touchesBegan(touches: NSSet, withEvent event: UIEvent) {

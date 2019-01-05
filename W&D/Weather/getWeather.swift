@@ -8,11 +8,12 @@ class GetWeather: NSObject {
     static let shared = GetWeather()
     private override init() {}
     
+    
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let openweatherMapBaseURL = "http:/api.openweathermap.org/data/2.5/forecast"
     let openweatherMaAPIKey = "02e192611291898113072edd948bbe34"
     
-    func getWeather(forCity: String) {
+    func getWeather(forCity: String, showAlert: Bool) {
         let myUrl = "\(openweatherMapBaseURL)?&q=\(forCity)&APPID=\(openweatherMaAPIKey)"
         print("myUrl \(myUrl)")
         
@@ -43,7 +44,7 @@ class GetWeather: NSObject {
                               coordLon: json["city"]["coord"]["lon"].doubleValue,
                               name: json["city"]["name"].stringValue,
                               country: json["city"]["country"].stringValue,
-                              weather: weather)
+                              weather: weather, showAlert: showAlert)
             } else {
                 print("change")
                 self.deleteFromCoreData(id: id)
@@ -52,12 +53,12 @@ class GetWeather: NSObject {
                               coordLon: json["city"]["coord"]["lon"].doubleValue,
                               name: json["city"]["name"].stringValue,
                               country: json["city"]["country"].stringValue,
-                              weather: weather)
+                              weather: weather, showAlert: showAlert)
             }
         }
     }
     
-    func saveCity(id: Int64, coordLat: Double, coordLon: Double, name: String, country: String, weather: [Weather]) {
+    func saveCity(id: Int64, coordLat: Double, coordLon: Double, name: String, country: String, weather: [Weather], showAlert: Bool) {
         print("saved element")
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let entity = NSEntityDescription.entity(forEntityName: "City", in: context)
@@ -70,7 +71,9 @@ class GetWeather: NSObject {
         categObject.country = country
 //        self.appDelegate.allCities.append(categObject)
         //check core data if contains sity with id, need replace city/ else save city
-            
+        
+        
+        
         //save context
         if context.hasChanges {
             print("context is change")
@@ -85,6 +88,15 @@ class GetWeather: NSObject {
         }
         
         self.fetchCoreData()
+        
+        appDelegate.currentCity = appDelegate.allCities.filter({$0.id == id}).first
+        appDelegate.currentWeather = appDelegate.currentCity.weather?[0]
+        if showAlert {
+            UserDefaults.standard.set(appDelegate.currentCity.id, forKey: "CurrentCityId")
+            NotificationCenter.default.post(name: NSNotification.Name("CloseSearch"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("showSideMenu"), object: nil)
+        }
+       
     }
 
     func fetchCoreData() {
@@ -102,10 +114,17 @@ class GetWeather: NSObject {
                 if appDelegate.currentCity == nil || appDelegate.currentCity.name == nil {
                     if UserDefaults.standard.integer(forKey: "CurrentCityId") != 0 {
                         appDelegate.currentCity = appDelegate.allCities.filter({$0.id == UserDefaults.standard.integer(forKey: "CurrentCityId")}).first
+                        print("sss \(appDelegate.allCities.filter({$0.id == UserDefaults.standard.integer(forKey: "CurrentCityId")}).count)")
+                        if appDelegate.currentCity == nil {
+                            appDelegate.currentCity = appDelegate.allCities[0]
+                        }
+                        print("1")
                     } else {
+                        print("2")
                         appDelegate.currentCity = appDelegate.allCities[0]
-                        UserDefaults.standard.set(appDelegate.currentCity.id, forKey: "CurrentCityId")
                     }
+                    print("app \(String(describing: appDelegate.currentCity))")
+                    appDelegate.currentWeather = appDelegate.currentCity.weather?[0]
                 }
             } else {
                 //need add city
@@ -131,6 +150,7 @@ class GetWeather: NSObject {
         
         do {
             try context.save()
+            print("seve delete context")
         } catch {
             print("context error")
         }

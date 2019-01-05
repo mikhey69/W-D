@@ -29,6 +29,7 @@
 		D6789DBA21D50E61007168AF /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6789DB921D50E61007168AF /* CoreDataManager.swift */; };
 		D6789DBD21D552D1007168AF /* WeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6789DBC21D552D1007168AF /* WeatherCell.swift */; };
 		D67AC18821DD176F00D4D331 /* DialyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67AC18721DD176F00D4D331 /* DialyWeatherCell.swift */; };
+		D6F3007E21DFBD0400552C6A /* DetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F3007D21DFBD0400552C6A /* DetailsCell.swift */; };
 		F0AB7ECFCA369D7275EF8883 /* Pods_W_D.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F600AA66EE138590D86BF47 /* Pods_W_D.framework */; };
 		FF16F10D21D6237C00871176 /* DetailsWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF16F10C21D6237C00871176 /* DetailsWeather.swift */; };
 		FFA0F26121D62DF700EA81FA /* SideMenuWithCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA0F26021D62DF700EA81FA /* SideMenuWithCity.swift */; };
@@ -60,10 +61,11 @@
 		D6789DB921D50E61007168AF /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D6789DBC21D552D1007168AF /* WeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCell.swift; sourceTree = "<group>"; };
 		D67AC18721DD176F00D4D331 /* DialyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialyWeatherCell.swift; sourceTree = "<group>"; };
+		D6F3007D21DFBD0400552C6A /* DetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsCell.swift; sourceTree = "<group>"; };
 		F8C5BEF2A4798E9FB8A9E2E7 /* Pods-W&D.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-W&D.debug.xcconfig"; path = "Pods/Target Support Files/Pods-W&D/Pods-W&D.debug.xcconfig"; sourceTree = "<group>"; };
 		F9E074FC5964504156343243 /* Pods-W&D.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-W&D.release.xcconfig"; path = "Pods/Target Support Files/Pods-W&D/Pods-W&D.release.xcconfig"; sourceTree = "<group>"; };
 		FF16F10C21D6237C00871176 /* DetailsWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsWeather.swift; sourceTree = "<group>"; };
-		FFA0F26021D62DF700EA81FA /* SideMenuWithCity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuWithCity.swift; sourceTree = "<group>"; };
+		FFA0F26021D62DF700EA81FA /* SideMenuWithCity.swift */ = {isa = PBXFileReference; indentWidth = 5; lastKnownFileType = sourcecode.swift; path = SideMenuWithCity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +172,7 @@
 				D6789DBC21D552D1007168AF /* WeatherCell.swift */,
 				D677A37521D6A3A500C6D31E /* AddedCitiesListCell.swift */,
 				D67AC18721DD176F00D4D331 /* DialyWeatherCell.swift */,
+				D6F3007D21DFBD0400552C6A /* DetailsCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 			files = (
 				D618324B21D3AF31002000CB /* Dresser.swift in Sources */,
 				D661A87F21D2C6BB00994392 /* Login.swift in Sources */,
+				D6F3007E21DFBD0400552C6A /* DetailsCell.swift in Sources */,
 				D6789DB821D50874007168AF /* Weather.swift in Sources */,
 				D677A37621D6A3A500C6D31E /* AddedCitiesListCell.swift in Sources */,
 				D65BAC1521D2BB73003C40C2 /* Dialy.swift in Sources */,
@@ -494,6 +498,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J8LWAAB2XC;
 				INFOPLIST_FILE = "W&D/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -513,6 +518,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J8LWAAB2XC;
 				INFOPLIST_FILE = "W&D/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

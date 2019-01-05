@@ -44,6 +44,7 @@ class Dialy: UIViewController {
         bannerView.load(GADRequest())
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateWeather), name: NSNotification.Name("ChangeCity"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showSideMenu), name: NSNotification.Name("showSideMenu"), object: nil)
         
         isSwitch.addTarget(self,
                            action: #selector(updateWeather),
@@ -78,6 +79,10 @@ class Dialy: UIViewController {
         
         weatherSectionTitles = [String](weathercarsDictionary.keys)
         weatherSectionTitles = weatherSectionTitles.sorted(by: { $0 < $1 })
+    }
+    
+    @objc func showSideMenu() {
+        performSegue(withIdentifier: "showSideMenu2", sender: nil)
     }
     
     @objc func updateWeather() {
@@ -128,13 +133,12 @@ extension Dialy: UITableViewDelegate, UITableViewDataSource {
         let weatherKey = weatherSectionTitles[indexPath.section]
         
             if let weatherValues = weathercarsDictionary[weatherKey] {
-                let city = weatherValues[indexPath.row]
-                cell.temp.text = String(Int((city.temp ?? 0) - 273.15)) + "°"
+                cell.weatherInfo = weatherValues[indexPath.row]
+                cell.temp.text = String(Int((cell.weatherInfo.temp ?? 0) - 273.15)) + "°"
                 //add feel temp
-                cell.tempFeel.text = "/" + String(Int((city.temp ?? 0) - 273.15)) + "°"
-                cell.time.text = String(city.date?.dropFirst(11).dropLast(3) ?? "")
-                cell.imgView.image = Function.shared.getWeatherIcon(name: city.icon ?? "")
-                print("city is \(appDelegate.currentCity.name)")
+                cell.tempFeel.text = "/" + String(Int((cell.weatherInfo.temp ?? 0) - 273.15)) + "°"
+                cell.time.text = String(cell.weatherInfo.date?.dropFirst(11).dropLast(3) ?? "")
+                cell.imgView.image = Function.shared.getWeatherIcon(name: cell.weatherInfo.icon ?? "")
             }
         return cell
     }
@@ -154,13 +158,15 @@ extension Dialy: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "showDetailsDailyHourly", sender: nil)
+        let cell = tableView.cellForRow(at: indexPath) as! DialyWeatherCell
+        performSegue(withIdentifier: "showDetailsDailyHourly", sender: cell)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetailsDailyHourly" {
-//            let vc = segue.destination as! DetailsWeather
-            //add info
+            let vc = segue.destination as! DetailsWeather
+            let weather = sender as! DialyWeatherCell
+            vc.weather = weather.weatherInfo
         }
     }
     
@@ -197,4 +203,6 @@ extension Dialy: UITableViewDelegate, UITableViewDataSource {
         
         return headerView
     }
+    
+    
 }

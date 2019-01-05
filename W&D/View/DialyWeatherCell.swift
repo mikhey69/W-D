@@ -17,6 +17,8 @@ class DialyWeatherCell: UITableViewCell {
     @IBOutlet weak var temp: UILabel!
     @IBOutlet weak var tempFeel: UILabel!
     
+    var weatherInfo: Weather!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }

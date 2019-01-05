@@ -54,6 +54,7 @@ extension SideMenuWithCity {
         if !appDelegate.allCities.isEmpty {
             let city = appDelegate.allCities[indexPath.row]
             let weather = city.weather?[0]
+            cell.id = city.id
             cell.city.text = city.name
             cell.country.text = city.country
             cell.temp.text = String(Int((weather?.temp ?? 0) - 273.15)) + "°"
@@ -72,17 +73,97 @@ extension SideMenuWithCity {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! AddedCitiesListCell
-        var cityId = appDelegate.allCities.filter({$0.name == cell.city.text}).first
+        let cityId = appDelegate.allCities.filter({$0.name == cell.city.text}).first
         UserDefaults.standard.set(cityId?.id, forKey: "CurrentCityId")
         appDelegate.currentCity = cityId
         city.text = appDelegate.currentCity.name
         let weather = appDelegate.currentWeather
         temp.text = String(Int((weather?.temp ?? 0) - 273.15)) + "°"
         //save to userDefaults
-        
+
         NotificationCenter.default.post(name: NSNotification.Name("ChangeCity"), object: nil)
         tableView.reloadData()
         self.dismiss(animated: true, completion: nil)
-        
     }
+
+    
+//    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+//        let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
+//            print("more button tapped")
+//        }
+//        more.backgroundColor = UIColor.lightGray
+//
+//        let favorite = UITableViewRowAction(style: .normal, title: "Favorite") { action, index in
+//            print("favorite button tapped")
+//        }
+//        favorite.backgroundColor = UIColor.orange
+//
+//        let share = UITableViewRowAction(style: .normal, title: "Share") { action, index in
+//            print("share button tapped")
+//        }
+//        share.backgroundColor = UIColor.blue
+//
+//        return [share, favorite, more]
+//    }
+//
+//    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+//        // the cells you would like the actions to appear needs to be editable
+//        return true
+//    }
+    
+     
+     //new
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//
+//        }
+//        tableView.setEditing(editingStyle != .none, animated: true)
+//    }
+     
+     //new2
+     
+     func tableView(_ tableView: UITableView,
+                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+     {
+          let closeAction = UIContextualAction(style: .normal, title:  "Delete", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+               print("OK, marked as Closed")
+               let cell = tableView.cellForRow(at: indexPath) as! AddedCitiesListCell
+                         GetWeather.shared.deleteFromCoreData(id: cell.id)
+               
+               if self.appDelegate.currentCity.id == cell.id {
+                    if !self.appDelegate.allCities.isEmpty {
+                         self.appDelegate.allCities = self.self.appDelegate.allCities.filter({$0.id == cell.id})
+                         self.appDelegate.currentCity = self.appDelegate.allCities[0]
+                         self.appDelegate.currentWeather = self.appDelegate.currentWeather
+                                   tableView.reloadData()
+               
+                              }
+                         }
+               UserDefaults.standard.set(self.appDelegate.currentCity.id, forKey: "CurrentCityId")
+                         GetWeather.shared.fetchCoreData()
+                         tableView.reloadData()
+                         print("index \(indexPath.row)")
+                         NotificationCenter.default.post(name: NSNotification.Name("ChangeCity"), object: nil)
+               
+               
+               success(true)
+          })
+          closeAction.backgroundColor = .red
+          
+          return UISwipeActionsConfiguration(actions: [closeAction])
+          
+     }
+     
+     func tableView(_ tableView: UITableView,
+                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+     {
+          let modifyAction = UIContextualAction(style: .normal, title:  "Update", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+               print("Update action ...")
+               success(true)
+          })
+//          modifyAction.image = UIImage(named: "hammer")
+          modifyAction.backgroundColor = .blue
+          
+          return UISwipeActionsConfiguration(actions: [modifyAction])
+     }
 }

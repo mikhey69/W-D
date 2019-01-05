@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import SwiftyJSON
 
+@available(iOS 11.0, *)
 class Function: NSObject {
     
     static let shared = Function()
@@ -42,9 +43,8 @@ class Function: NSObject {
         //weather
         //check for bugs
         if appDelegate.currentCity != nil {
-            //            var weather = appDelegate.currentCity.weather?[index]
             
-            var a = hour
+            let a = hour
             var weatherHour = a
             
             switch Int(a)! {
@@ -93,7 +93,7 @@ class Function: NSObject {
                     appDelegate.currentCity.weather?.removeFirst()
                 }
                 
-                print("curr \(appDelegate.currentCity.name)")
+//                print("curr \(appDelegate.currentCity.name)")
                 appDelegate.currentWeather = appDelegate.currentCity.weather?[0]
             }
         }
@@ -150,7 +150,7 @@ class Function: NSObject {
                     }
                     print("counttt \(self.appDelegate.citiesJSON.count)")
                     if self.appDelegate.citiesJSON.count < 0 {
-                        let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.citiesJSON, requiringSecureCoding: false)
+                        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.citiesJSON)
                         UserDefaults.standard.set(encodedData, forKey: "citiesJSON")
                         UserDefaults.standard.synchronize()
                         print("userDef is done")
